@@ -4,7 +4,7 @@
   {% load static %}
   <meta charset="UTF-8">
   <title>Dealership Review</title>
-	<link rel="stylesheet" href="{% static 'style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -16,24 +16,46 @@
 </head>
 
 <body>
-  <!-- Navigation bar -->
-  <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand d-flex flex-column align-items-center" href="#">
-					<span class="brand-title">Best Cars</span><span>dealership</span>
-				</a>
-      </div>
-        <ul class="nav navbar-nav navbar-right d-flex flex-row">
-          <li class="nav-item">
-            <a class="btn btn-link" href="{% url 'djangoapp:about' %}">Home</a>
-          </li>
-					<li class="nav-item">
-            <a class="btn btn-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
-          </li>
-        </ul>
+	<!-- Navigation bar -->
+	<nav class="navbar navbar-light bg-light">
+    <div class="navbar-header d-flex flex-column align-items-center mb-2">
+      <span class="brand">Best Cars</span>
+      <span>Dealership Review</span>
     </div>
-  </nav>
+    <div class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav">
+        {% if user.is_authenticated %}
+        <li>
+          <span class="navbar-header mr-2"> Welcome, </span>
+          <span class="navbar-header mr-5 text-info"> {{ user.username }} </span>
+          <button class="btn btn-primary">
+            <a class="btn btn-link text-light text-decoration-none" 
+               href="{% url 'djangoapp:logout' %}">Logout</a>
+          </button>
+        </li>
+        {% else %}
+        <li>
+          <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Username" name="username" />
+              <input type="password" class="form-control" placeholder="Password" name="psw" />
+              <button class="btn btn-primary" type="submit">Login</button>
+              <a class="btn btn-link text-decoration-none" 
+                 href="{% url 'djangoapp:registration' %}">Sign Up</a>
+            </div>
+          </form>
+        </li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:about' %}">Home</a>
+          <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+	</nav>
 
   <!-- Page content -->
 	<section class="content d-flex flex-column align-items-center">
