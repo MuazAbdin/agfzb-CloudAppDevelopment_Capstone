@@ -38,7 +38,7 @@ def login_request(request):
             login(request, user)
             return redirect('djangoapp:index')
         
-        context['login_message'] = "Invalid username or password."
+        context['message'] = "Invalid username or password. Sign-up if you have not yet."
         return render(request, 'djangoapp/registration.html', context)
     
     return render(request, 'djangoapp/registration.html', context)  
@@ -73,7 +73,7 @@ def registration_request(request):
             login(request, user)
             return redirect("djangoapp:index")
         
-        context['register_message'] = "User already exists."
+        context['message'] = "User already exists."
         return render(request, 'djangoapp/registration.html', context)
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships

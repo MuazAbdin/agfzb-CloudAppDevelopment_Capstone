@@ -140,4 +140,5 @@ server/djangoapp/migrations/
 *.pyc
 server/djangoapp/migrations/
 server/venv/
+functions/sample/python/venv/
 

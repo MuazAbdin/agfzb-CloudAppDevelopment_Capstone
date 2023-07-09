@@ -18,10 +18,11 @@
 <body>
 	<!-- Navigation bar -->
 	<nav class="navbar navbar-light bg-light">
-    <div class="navbar-header d-flex flex-column align-items-center mb-2">
+    <a class="navbar-header navbar-brand d-flex flex-column align-items-center mb-2 text-decoration-none"
+       href="{% url 'djangoapp:index' %}">
       <span class="brand">Best Cars</span>
       <span>Dealership Review</span>
-    </div>
+    </a>
     <div class="nav navbar-nav navbar-right">
       <ul class="nav navbar-nav">
         {% if user.is_authenticated %}
@@ -50,7 +51,7 @@
       </ul>
       <ul class="nav navbar-nav">
         <li class="nav-item">
-          <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:about' %}">Home</a>
+          <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:about' %}">About Us</a>
           <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:contact' %}">Contact Us</a>
         </li>
       </ul>
