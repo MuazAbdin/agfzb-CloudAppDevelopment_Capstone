@@ -121,7 +121,7 @@ def add_review(request, dealer_id):
             username = request.user.username
             # print(request.POST)
             car_id = request.POST["car"]
-            car = CarModel.objects.get(pk=car_id)
+            car = CarModel.objects.get(pk=car_id) if int(car_id) > 0 else None
             
             payload = {
                 'time': datetime.utcnow().isoformat(),
@@ -131,9 +131,9 @@ def add_review(request, dealer_id):
                 'review': request.POST["content"],
                 'purchase': "purchasecheck" in request.POST and request.POST["purchasecheck"] == 'on',
                 'purchase_date': request.POST["purchasedate"] if "purchasedate" in request.POST else '',
-                'car_make': car.car_make.name,
-                'car_model': car.name,
-                'car_year': int(car.year.strftime("%Y"))
+                'car_make': car.car_make.name if car else '',
+                'car_model': car.name if car else '',
+                'car_year': int(car.year.strftime("%Y")) if car else ''
             }
 
             new_payload = {'review': payload}

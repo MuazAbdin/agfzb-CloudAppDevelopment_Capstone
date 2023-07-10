@@ -87,20 +87,20 @@
     {% if reviews %}
     <div class="card-deck">
       {% for item in reviews %}
-      <div class="card" style="width: 36rem;">
+      <div class="card">
         <div class="card-body bg-light">
           <h6 class="card-title alert alert-dark" style="position: relative;">
             <b>Name:</b> {{ item.name }} (ID={{ item.id }})
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {% if item.sentiment == "positive" %}
             <span class="material-symbols-outlined text-success bg-light rounded-circle"
-                  style="position: absolute; right: -3%; top:-20%; font-size:3em"> sentiment_satisfied </span>
+                  style="position: absolute; right: 0; top: 0; font-size:3em"> sentiment_satisfied </span>
             {% elif item.sentiment == "neutral" %}
             <span class="material-symbols-outlined text-warning bg-light rounded-circle"
-                  style="position: absolute; right: -3%; top:-20%; font-size:3em"> sentiment_neutral </span>
+                  style="position: absolute; right: 0; top: 0; font-size:3em"> sentiment_neutral </span>
             {% else %}
             <span class="material-symbols-outlined text-danger bg-light rounded-circle"
-                  style="position: absolute; right: -3%; top:-20%; font-size:3em"> sentiment_dissatisfied </span>
+                  style="position: absolute; right: 0; top: 0;; font-size:3em"> sentiment_dissatisfied </span>
             {% endif %}
             <br /><br />
             <b>Car:</b> {{ item.car_make }} {{ item.car_model }}

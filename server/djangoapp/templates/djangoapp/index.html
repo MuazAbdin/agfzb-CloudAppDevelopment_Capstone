@@ -61,14 +61,25 @@
   <!--Add a dealer table here -->
   <div class="container">
     <h1 class="about-title text-center"> Dealerships List </h1>
-    <h5 class="alert alert-warning text-center">
-      Click on a dealership <b> ID </b> to get its reviews
+    <h5 class="alert alert-warning text-center d-flex">
+      Click on a <b class="ml-2 mr-2"> Dealer Name </b> to get its reviews
+      {% if user.is_authenticated %}
+      , and on
+      <div class="btn btn-success btn-sm p-0 rounded-circle d-flex ml-2 mr-2">
+        <span class="material-symbols-outlined"> add </span>
+      </div>
+      to add a review.
+      {% endif %}
     </h5>
-    <table class="table table-striped">
+    <div class="container form-group d-flex align-items-baseline">
+      <label for="myInput" class="mr-3"><h5> <b> Search: </b></h5></label>
+      <input class=" w-50 form-control" id="myInput" type="text" placeholder="Keyword ...">
+    </div>
+    <table class="table table-striped" id="table">
       <thead class="bg-info text-white" style="position: sticky; top: 0px;">
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">Short Name</th>
+          <th scope="col">Dealer Name</th>
           <th scope="col">State</th>
           <th scope="col">City</th>
           <th scope="col">Address</th>
@@ -81,13 +92,13 @@
       <tbody>
         {% for dealer in dealerships %}
         <tr>
-            <th scope="row">
+            <th scope="row"> {{ dealer.id }} </th>
+            <td>
               <a class="text-decoration-none" href="{% url 'djangoapp:dealer_details' dealer.id %}">
-              {{ dealer.id }} 
+                {{ dealer.short_name }}
               </a>
-            </th>
-            <td> {{ dealer.short_name }} </td>
-            <td> {{ dealer.state }} </td>
+            </td>
+            <td class="state-cell"> {{ dealer.state }} </td>
             <td> {{ dealer.city }} </td>
             <td> {{ dealer.address }} </td>
             <td> {{ dealer.zip_code }} </td>
@@ -109,5 +120,14 @@
   </div>
   
 </body>
-
+<script>
+  $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#table tbody tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  </script>
 </html>

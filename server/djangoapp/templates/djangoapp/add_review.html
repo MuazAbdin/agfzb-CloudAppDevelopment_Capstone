@@ -79,7 +79,7 @@
         <div class="alert mr-3 form-group">
           <label for="car">Select car: &nbsp;&nbsp;</label>
           <select name="car" id="car" class="form-select" required>
-            <option value="select" selected>--Select--</option>
+            <option value=0 selected>--Select--</option>
             {% for car in cars %}
             <option selected value={{car.id}}>
               {{car.car_make.name}} {{car.name}} ({{ car.year|date:"Y" }})
@@ -94,6 +94,7 @@
         <span class="alert mr-3 form-group">
           <label for="purchasedate"> Purchase Date: </label>
           <input type="text" name="purchasedate" id="purchasedate"
+                 class="date-own ml-3 pl-2"
                  placeholder="MM/DD/YYYY" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}">
         </span>
         <div class="alert mb-3 form-group">
@@ -109,5 +110,10 @@
   </script>
   
 </body>
+<script type="text/javascript">
+  $('.date-own').datepicker({
+     format: 'mm/dd/yyyy'
+   });
+</script>
 
 </html>
