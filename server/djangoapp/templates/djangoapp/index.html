@@ -12,6 +12,7 @@
   <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
   <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
   <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,0,200" />
 </head>
 
 <body>
@@ -58,7 +59,55 @@
 	</nav>
 
   <!--Add a dealer table here -->
-
+  <div class="container">
+    <h1 class="about-title text-center"> Dealerships List </h1>
+    <h5 class="alert alert-warning text-center">
+      Click on a dealership <b> ID </b> to get its reviews
+    </h5>
+    <table class="table table-striped">
+      <thead class="bg-info text-white" style="position: sticky; top: 0px;">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Short Name</th>
+          <th scope="col">State</th>
+          <th scope="col">City</th>
+          <th scope="col">Address</th>
+          <th scope="col">Zip Code</th>
+          {% if user.is_authenticated %}
+          <th scope="col"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for dealer in dealerships %}
+        <tr>
+            <th scope="row">
+              <a class="text-decoration-none" href="{% url 'djangoapp:dealer_details' dealer.id %}">
+              {{ dealer.id }} 
+              </a>
+            </th>
+            <td> {{ dealer.short_name }} </td>
+            <td> {{ dealer.state }} </td>
+            <td> {{ dealer.city }} </td>
+            <td> {{ dealer.address }} </td>
+            <td> {{ dealer.zip_code }} </td>
+            {% if user.is_authenticated %}
+            <td class="text-center">
+              <a class="text-decoration-none" href="{% url 'djangoapp:add_review' dealer.id %}">
+                <button type="button" 
+                        class="btn btn-success btn-sm p-0 rounded-circle d-flex">
+                  <span class="material-symbols-outlined"> add </span>
+                </button>
+              </a>
+            </td>
+            {% endif %}
+        </tr>
+        
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
 </body>
 
 </html>

@@ -1,16 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
-
+  {% load static %}
+  <meta charset="UTF-8">
+  <title>Dealership Review</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,0,200" />
 </head>
-    <body>
-    <!--Add review form here -->
-    </body>
+
+<body>
+	<!-- Navigation bar -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-header navbar-brand d-flex flex-column align-items-center mb-2 text-decoration-none"
+        href="{% url 'djangoapp:index' %}">
+      <span class="brand">Best Cars</span>
+      <span>Dealership Review</span>
+    </a>
+    <div class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav">
+        {% if user.is_authenticated %}
+        <li>
+          <span class="navbar-header mr-2"> Welcome, </span>
+          <span class="navbar-header mr-5 text-info"> {{ user.username }} </span>
+          <button class="btn btn-primary">
+            <a class="btn btn-link text-light text-decoration-none" 
+                href="{% url 'djangoapp:logout' %}">Logout</a>
+          </button>
+        </li>
+        {% else %}
+        <li>
+          <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Username" name="username" />
+              <input type="password" class="form-control" placeholder="Password" name="psw" />
+              <button class="btn btn-primary" type="submit">Login</button>
+              <a class="btn btn-link text-decoration-none" 
+                  href="{% url 'djangoapp:registration' %}">Sign Up</a>
+            </div>
+          </form>
+        </li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav mt-3">
+        <li class="nav-item">
+          <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:about' %}">About Us</a>
+          <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Add review -->
+  <div class="container">
+    <h1 class="about-title text-center"> Dealer Review </h1>
+    <hr />
+    <div class='container alert alert-light mt-3 font-weight-bold'>
+      <span class="alert alert-info mr-3"> {{ dealer.id }} </span>
+      <span class="alert alert-info mr-3"> {{ dealer.full_name }} </span>
+      <span class="alert alert-info"> 
+          {{ dealer.address }}, 
+          {{ dealer.city }} {{ dealer.zip_code }}, 
+          {{ dealer.state }}
+      </span>
+    </div>
+    <hr />
+
+    <form action="{% url 'djangoapp:add_review' dealer.id%}" method="post">
+      {% csrf_token %}
+      <div class="container alert alert-light text-dark font-weight-bold form-group">
+        <div class="alert mr-3 form-group">
+          <label for="car">Select car: &nbsp;&nbsp;</label>
+          <select name="car" id="car" class="form-select" required>
+            <option value="select" selected>--Select--</option>
+            {% for car in cars %}
+            <option selected value={{car.id}}>
+              {{car.car_make.name}} {{car.name}} ({{ car.year|date:"Y" }})
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <span class="alert ml-3 mr-3 form-group form-check">
+          <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
+          <label class="form-check-label" for="purchasecheck">&nbsp;&nbsp;Purchased </label>
+        </span>
+        <span class="alert mr-3 form-group">
+          <label for="purchasedate"> Purchase Date: </label>
+          <input type="text" name="purchasedate" id="purchasedate"
+                 placeholder="MM/DD/YYYY" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}">
+        </span>
+        <div class="alert mb-3 form-group">
+          <label for="content"> Review Details: </label>
+          <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+        </div>
+        <div class="alert">
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  </script>
+  
+</body>
+
 </html>

@@ -1,18 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  {% load static %}
+  <meta charset="UTF-8">
+  <title>Dealership Review</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,0,200" />
 </head>
 
-    <body>
+<body>
+	<!-- Navigation bar -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-header navbar-brand d-flex flex-column align-items-center mb-2 text-decoration-none"
+        href="{% url 'djangoapp:index' %}">
+      <span class="brand">Best Cars</span>
+      <span>Dealership Review</span>
+    </a>
+    <div class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav">
+        {% if user.is_authenticated %}
+        <li>
+          <span class="navbar-header mr-2"> Welcome, </span>
+          <span class="navbar-header mr-5 text-info"> {{ user.username }} </span>
+          <button class="btn btn-primary">
+            <a class="btn btn-link text-light text-decoration-none" 
+                href="{% url 'djangoapp:logout' %}">Logout</a>
+          </button>
+        </li>
+        {% else %}
+        <li>
+          <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Username" name="username" />
+              <input type="password" class="form-control" placeholder="Password" name="psw" />
+              <button class="btn btn-primary" type="submit">Login</button>
+              <a class="btn btn-link text-decoration-none" 
+                  href="{% url 'djangoapp:registration' %}">Sign Up</a>
+            </div>
+          </form>
+        </li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav mt-3">
+        <li class="nav-item">
+          <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:about' %}">About Us</a>
+          <a class="btn btn-link text-decoration-none" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-    <!--Add a nav bar here -->
+  <!-- Dealer Review -->
+  <div class="container">
+    <h1 class="about-title text-center"> Dealer Review </h1>
+    <hr />
+    <div class='container alert alert-light mt-3 font-weight-bold'>
+      {% if user.is_authenticated %}
+      <a class="text-decoration-none" href="{% url 'djangoapp:add_review' dealer.id %}">
+        <button type="button"
+                class="btn btn-success btn-sm p-0 rounded-circle d-flex">
+          <span class="material-symbols-outlined text-info bg-light rounded-circle"
+                style="position: absolute; right: 3%; top:3%; font-size:3em;">
+            add_circle
+          </span>
+        </button>
+      </a>
+      {% endif %}
+      <span class="alert alert-info mr-3"> {{ dealer.id }} </span>
+      <span class="alert alert-info mr-3"> {{ dealer.full_name }} </span>
+      <span class="alert alert-info"> 
+          {{ dealer.address }}, 
+          {{ dealer.city }} {{ dealer.zip_code }}, 
+          {{ dealer.state }}
+      </span>
+    </div>
+    <hr />
 
-    <!-- Add reviews as cards -->
+    {% if reviews %}
+    <div class="card-deck">
+      {% for item in reviews %}
+      <div class="card" style="width: 36rem;">
+        <div class="card-body bg-light">
+          <h6 class="card-title alert alert-dark" style="position: relative;">
+            <b>Name:</b> {{ item.name }} (ID={{ item.id }})
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {% if item.sentiment == "positive" %}
+            <span class="material-symbols-outlined text-success bg-light rounded-circle"
+                  style="position: absolute; right: -3%; top:-20%; font-size:3em"> sentiment_satisfied </span>
+            {% elif item.sentiment == "neutral" %}
+            <span class="material-symbols-outlined text-warning bg-light rounded-circle"
+                  style="position: absolute; right: -3%; top:-20%; font-size:3em"> sentiment_neutral </span>
+            {% else %}
+            <span class="material-symbols-outlined text-danger bg-light rounded-circle"
+                  style="position: absolute; right: -3%; top:-20%; font-size:3em"> sentiment_dissatisfied </span>
+            {% endif %}
+            <br /><br />
+            <b>Car:</b> {{ item.car_make }} {{ item.car_model }}
+            &nbsp;&nbsp;&nbsp;
+            <b>Year:</b> {{ item.car_year }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {% if item.purchase %}
+            <b class="text-success">PURCHASED</b>
+            {% else %}
+            <b class="text-danger">NOT PURCHASED</b>
+            {% endif %}
+          </h6>
+          <p class="card-text alert alert-warning"> {{ item.review }}</p>
 
-    </body>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <h4 class="alert alert-danger text-center m-5">No reviews are available.</h4>
+    {% endif %}
+
+  </div>
+  
+</body>
 
 </html>
